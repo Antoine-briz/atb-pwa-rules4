@@ -1,0 +1,810 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+body { background: var(--bg,#0b1220); color: var(--fg,#e5e7eb); }
+@media (prefers-color-scheme: light){
+  body { --bg:#f8fafc; --fg:#0f172a; --card:#ffffff; --muted:#475569; --border:#e2e8f0; --accent:#3b82f6; }
+}
+@media (prefers-color-scheme: dark){
+  body { --bg:#0b1220; --fg:#e5e7eb; --card:#0f172a; --muted:#94a3b8; --border:#1f2937; --accent:#3b82f6; }
+}
+
+.appbar { position:sticky; top:0; background:var(--card); border-bottom:1px solid var(--border); padding:14px 16px; z-index:10; }
+.appbar h1 { margin:0; line-height:1.2; font-size:18px; }
+.appbar small { font-weight:500; color: var(--muted); }
+
+.container { max-width: 900px; margin: 0 auto; padding: 16px; }
+
+.title-badge { display:block; text-align:center; font-weight:800; margin:12px auto 20px; padding:10px 14px; border:2px solid var(--accent); border-radius:12px; width:max-content; }
+.grid { display:grid; gap:12px; }
+.grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width:640px){ .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; } }
+
+.card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; }
+.btn { display:block; width:100%; text-align:center; padding:16px; border-radius:16px; border:0; font-weight:700; cursor:pointer; background:#4169be; color:#fff; }
+.btn.outline { background:transparent; color:var(--fg); border:2px solid var(--accent); }
+.btn.ghost { background:transparent; color:var(--fg); border:1px dashed var(--border); }
+
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:rgba(0,0,0,.08); padding:2px 6px; border-radius:6px; }
+
+.form { display:grid; gap:12px; }
+.form .row { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
+@media (max-width:640px){ .form .row { grid-template-columns: 1fr; } }
+fieldset { border:1px solid var(--border); border-radius:12px; padding:12px; }
+legend { padding:0 6px; font-weight:700; }
+label { display:flex; align-items:center; gap:8px; }
+input[type="text"], input[type="number"], select, textarea {
+  width:100%; padding:12px; border:1px solid var(--border); border-radius:12px; background:transparent; color:inherit;
+}
+.actions { display:flex; gap:10px; }
+.actions .btn { flex:1; }
+
+.result { white-space: pre-wrap; padding:12px; border:1px dashed var(--border); border-radius:12px; min-height:80px; }
+
+.footer { padding:24px 16px 40px; text-align:center; color:var(--muted); }
+.hidden { display:none; }
+.hero { padding: 10px; }
+.hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid #1e3a8a;   /* liseré proche de ta maquette */
+  border-radius: 10px;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 16px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+.hero-pneu { padding: 8px; }
+.form-hero {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+/* ----------- CSS spécifique pour le menu antibiothérapie et l'affichage des images ----------- */
+
+/* Style pour les liens dans le menu des antibiothérapies */
+.germs-links a {
+  display: block;
+  margin: 10px 0;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--accent);
+  transition: color 0.3s ease;
+}
+
+.germs-links a:hover {
+  color: var(--fg);
+}
+
+/* Style des images */
+.image-container img {
+  width: 100%;
+  height: auto;
+  max-width: 600px;  /* Limite la taille des images */
+  margin-top: 20px;
+  border-radius: 12px;
+  display: none;  /* Par défaut, les images sont cachées */
+}
+
+/* Ajout d'une animation pour l'affichage des images */
+.image-container img {
+  transition: opacity 0.5s ease;
+}
+
+/* Style pour les boutons de navigation (Précédent / Suivant) */
+.pdf-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;  /* Espacement entre les boutons */
+  margin: 20px 0;
+}
+
+.pdf-nav button {
+  padding: 10px 20px;
+  background-color: #4CAF50;  /* Couleur de fond */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pdf-nav button:hover {
+  background-color: #45a049;  /* Couleur de fond au survol */
+}
+
+#pdfViewer {
+  display: flex; /* Utilisation de flexbox pour un meilleur alignement */
+  justify-content: flex-start; /* Aligner à gauche */
+  align-items: flex-start; /* Aligner en haut */
+  margin: 0; /* Retirer les marges par défaut */
+  padding: 0; /* Retirer les paddings */
+  width: 100%; /* S'assurer que l'élément occupe toute la largeur disponible */
+}
+
+#pdfViewer canvas {
+  margin: 0; /* Retirer toute marge autour du canvas */
+  padding: 0; /* Retirer les paddings */
+  display: block; /* Bloquer le canvas pour qu'il s'étire */
+}
+
+/* Ajouter un conteneur pour le PDF avec des barres de défilement */
+#pdfViewer {
+  width: 100%;
+  height: 80vh; /* Hauteur du PDF */
+  overflow: auto; /* Active la barre de défilement si nécessaire */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start; /* Aligner le PDF à gauche */
+  background-color: #f1f1f1; /* Optionnel, juste pour le fond */
+}
+
+#pdfViewer canvas {
+  margin: 0;  /* Supprime les marges autour du canvas */
+  display: block;  /* Assure que le canvas occupe toute la largeur */
+}
+
+/* Style du bouton Retour */
+#pdfViewer button {
+  width: 50%; 
+  margin: 10px 0;
+  padding: 8px 16px;  /* Bouton plus petit */
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;  /* Taille de police réduite */
+}
+
+#pdfViewer button:hover {
+  background-color: #e64a19;
+}
+
+/* Placer le bouton Retour au-dessus des autres boutons de navigation */
+.pdf-nav {
+  margin-top: 10px;
+}
+
+/* Style spécifique pour l'encadré contenant la légende des sepsis sans porte d'entrée */
+.warning-container {
+  border: 2px solid #d1d5db;      /* Bordure gris clair */
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #f3f4f6;      /* Fond gris clair (remplace le bleu) */
+  border-radius: 8px;
+}
+
+.warning-container p {
+  font-size: 14px;
+  color: var(--fg);               /* s'adapte clair/sombre */
+}
+
+.warning-container ul {
+  padding-left: 20px;
+}
+
+/* Mobile : encadrés légende plus lisibles */
+@media (max-width: 768px) {
+  .warning-container {
+    background-color: #d1d5db !important; /* gris moyen */
+    border-color: #9ca3af !important;     /* gris un ton plus foncé */
+  }
+  /* Forcer le texte en noir uniquement dans ces encadrés */
+  .warning-container,
+  .warning-container * {
+    color: #000 !important;
+  }
+}
+
+#pdfViewer {
+    width: 100%;  /* S'assurer que le pdfViewer prend toute la largeur */
+    height: auto;
+}
+
+#pdfViewer canvas {
+    width: 100% !important;  /* Remplir toute la largeur de l'écran */
+    height: auto !important;  /* Adapter la hauteur en fonction de la largeur */
+}
+
+#resRein strong { font-size: 18px; }
+#resRein em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* Encadré résultats Modalités */
+#resModa strong { font-size: 18px; }
+#resModa em { color: var(--accent); font-style: normal; font-weight: 600; }
+#resModa u { text-underline-offset: 3px; }
+#resModa .moda-suffix { color: var(--muted); font-size: 12px; margin-left: 6px; }
+
+.credits {
+  font-size: 0.8em;
+  color: #000;            /* texte noir */
+  font-style: italic;
+  margin-top: 6px;        /* petit espace au-dessus */
+  border-top: 1px solid #ccc;
+  padding-top: 4px;
+  text-align: left;       /* alignement à gauche */
+  line-height: 1.2;       /* lignes rapprochées */
+}
+
+/* =========================================================
+   ✅ Simplification pour la gestion des encadrés et des tableaux
+   ========================================================= */
+
+/* 1️⃣ Encadré prenant toute la largeur de l'écran sur mobile */
+.info-card {
+  width: 100%;              /* Prend toute la largeur de l'écran */
+  max-width: 100%;          /* Ne dépasse jamais la largeur de l'écran */
+  box-sizing: border-box;   /* Inclus les bordures et paddings dans la largeur totale */
+  overflow: hidden;         /* Masque tout contenu qui dépasse de l'encadré */
+}
+
+/* 2️⃣ Encadré avec tableau à l'intérieur qui peut déborder horizontalement */
+.info-card .info-content {
+  overflow-x: auto !important; /* Permet le défilement horizontal à l'intérieur de l'encadré */
+  -webkit-overflow-scrolling: touch; /* Défilement fluide sur mobile */
+  padding: 0 5px;             /* Un peu d'espace sur les côtés pour le confort */
+}
+
+/* 3️⃣ Les tableaux peuvent dépasser à droite à l'intérieur de l'encadré */
+.info-card table {
+  width: auto !important;     /* Permet au tableau de se déployer au besoin */
+  min-width: 720px;           /* Largeur minimale pour éviter que les colonnes soient trop étroites */
+  table-layout: auto;         /* Laisse les colonnes s'ajuster automatiquement */
+  border-collapse: collapse;  /* Fusionne les bordures du tableau */
+}
+
+/* 4️⃣ Empêcher le texte dans les cellules de déborder des cellules */
+.info-card table td,
+.info-card table th {
+  white-space: nowrap;        /* Empêche le texte de se casser à la ligne */
+  overflow: hidden;           /* Cache tout contenu qui dépasse */
+  text-overflow: ellipsis;    /* Affiche "..." si le texte dépasse de la cellule */
+  padding: 6px 8px;           /* Un peu d'espace autour du texte */
+}
+
+/* 5️⃣ Taille de la police des tableaux et du contenu ajustée pour mobile */
+@media (max-width: 768px) {
+  .info-card table {
+    font-size: 12px !important;  /* Réduit la taille de la police pour les tableaux sur mobile */
+  }
+
+  .info-card .info-content {
+    font-size: 12px !important;  /* Réduit la taille de la police du contenu des encadrés */
+  }
+}
+
+/* 6️⃣ Titre de la bactérie sur deux lignes pour éviter un dépassement sur mobile */
+.title-badge {
+  width: 100%;                /* Le titre occupe toute la largeur disponible */
+  max-width: 100%;            /* Empêche le titre de dépasser la largeur de l'écran */
+  word-wrap: break-word;      /* Permet au texte du titre de se couper en plusieurs lignes */
+  text-align: center;         /* Centre le titre sur l'écran */
+  white-space: normal;        /* Permet aux titres longs de passer à la ligne suivante */
+  font-size: 18px;            /* Taille de police ajustée (réduit si nécessaire) */
+  line-height: 1.3;           /* Espacement entre les lignes du titre */
+  margin: 0 auto;             /* Centre le titre */
+}
+
+@media (max-width: 768px) {
+  /* Réduit la taille du titre sur mobile */
+  .title-badge {
+    font-size: 16px;           /* Taille du titre plus petite sur mobile */
+    padding-left: 10px;        /* Padding ajusté */
+    padding-right: 10px;
+  }
+}
+
+/* 7️⃣ Optimisation générale sur mobile pour les encadrés */
+@media (max-width: 768px) {
+  .info-card {
+    padding: 10px;             /* Réduit le padding des encadrés sur mobile */
+  }
+
+  .info-card h3 {
+    font-size: 14px;           /* Réduit la taille de la police des titres des encadrés */
+  }
+
+  .info-card .info-content {
+    font-size: 12px;           /* Réduit la taille de la police du contenu des encadrés */
+  }
+}
+
+/* =========================================================
+   ✅ Réduire et ajuster le contenu pour mobile
+   ========================================================= */
+
+/* 1️⃣ Enlever tout débordement à droite de la page sur mobile */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;  /* Empêche tout débordement horizontal global */
+}
+
+/* 2️⃣ Forcer la largeur du corps de la page à 100% pour éviter tout débordement */
+.bact-page {
+  width: 100% !important;  /* La page prend toute la largeur de l'écran */
+  max-width: 100%;         /* S'assurer qu'elle ne dépasse pas */
+  box-sizing: border-box;  /* Inclut padding et bordures dans la largeur */
+  overflow-x: hidden;      /* Éviter tout débordement horizontal sur la page */
+}
+
+/* 3️⃣ Encadrés prennent toute la largeur de l'écran sans déborder */
+.info-card {
+  width: 100%;                /* L'encadré prend toute la largeur de l'écran */
+  max-width: 100%;            /* Empêche le débordement de l'encadré */
+  box-sizing: border-box;     /* Inclut les bordures et padding dans la largeur totale */
+  overflow: hidden;           /* Masque tout contenu qui dépasse de l'encadré */
+  background-color: #f9f9f9;  /* Fond clair pour les encadrés */
+  color: black !important;    /* Assure que le texte est en noir et lisible */
+  border: 1px solid #ddd;     /* Bordure légère pour l'encadré */
+  border-radius: 8px;         /* Coins arrondis pour l'encadré */
+  padding: 1rem;              /* Ajoute un peu de padding à l'intérieur de l'encadré */
+}
+
+/* 4️⃣ Le contenu des tableaux peut dépasser à l'intérieur des encadrés mais ne fait pas défiler la page */
+.info-card .info-content {
+  overflow-x: auto !important;  /* Permet le défilement horizontal des tableaux uniquement à l'intérieur des encadrés */
+  -webkit-overflow-scrolling: touch;  /* Défilement fluide sur mobile */
+  padding: 0 5px;                /* Ajoute un peu d'espace sur les côtés pour plus de confort */
+}
+
+/* 5️⃣ S'assurer que le tableau prend toute la largeur sans provoquer de débordement */
+.info-card table {
+  width: 100% !important;     /* Assure que le tableau prend toute la largeur disponible */
+  min-width: 600px;           /* Largeur minimale, ajustée si nécessaire */
+  table-layout: auto;         /* Les colonnes s'ajustent automatiquement */
+  border-collapse: collapse;  /* Fusionne les bordures du tableau */
+}
+
+/* 6️⃣ Les cellules du tableau ne doivent pas déborder et doivent être visibles */
+.info-card table td,
+.info-card table th {
+  white-space: nowrap;        /* Empêche le texte de se couper sur plusieurs lignes dans les cellules */
+  overflow: hidden;           /* Cache les parties du texte qui dépassent */
+  text-overflow: ellipsis;    /* Affiche "..." si le texte est trop long pour tenir dans la cellule */
+  padding: 6px 8px;           /* Espace autour du texte dans les cellules */
+}
+
+/* 7️⃣ Gérer le défilement horizontal dans les tableaux pour que l'utilisateur puisse les voir en entier */
+.info-card .info-content {
+  overflow-x: auto !important; /* Permet de faire défiler horizontalement les tableaux à l'intérieur de l'encadré */
+  -webkit-overflow-scrolling: touch; /* Défilement fluide */
+  padding: 0 5px;
+}
+
+/* 8️⃣ Appliquer des ajustements de taille de police sur mobile */
+@media (max-width: 768px) {
+  .info-card table {
+    font-size: 12px !important;  /* Réduit la taille de la police pour les tableaux sur mobile */
+  }
+
+  .info-card .info-content {
+    font-size: 12px !important;  /* Réduit la taille de la police du contenu des encadrés */
+  }
+
+  .info-card h3 {
+    font-size: 14px;  /* Réduit la taille des titres sur mobile pour une meilleure lisibilité */
+  }
+}
+
+/* 9️⃣ Ajuster le titre pour l'affichage mobile (sur deux lignes si nécessaire) */
+.title-badge {
+  width: 100%;                /* Le titre prend toute la largeur disponible */
+  max-width: 100%;            /* Il ne dépasse jamais la largeur de l'écran */
+  word-wrap: break-word;      /* Permet au titre de passer à la ligne suivante si nécessaire */
+  text-align: center;         /* Centrer le titre */
+  white-space: normal;        /* Permet aux titres longs de passer à la ligne suivante */
+  font-size: 18px;            /* Taille de police ajustée (réduit si nécessaire) */
+  line-height: 1.3;           /* Espacement entre les lignes du titre */
+  margin: 0 auto;             /* Centrer le titre */
+}
+
+@media (max-width: 768px) {
+  /* Sur mobile, on peut réduire la taille du titre */
+  .title-badge {
+    font-size: 16px;           /* Taille du titre plus petite sur mobile */
+    padding-left: 10px;        /* Un peu de padding pour les petits écrans */
+    padding-right: 10px;
+  }
+}
+
+/* 10️⃣ Assurer que les titres des bactéries ne dépassent pas à l'écran */
+.title-badge {
+  word-wrap: break-word;      /* Permet au titre d'être sur 2 lignes si nécessaire */
+  text-align: center;         /* Centrage du titre */
+}
+
+/* 11️⃣ Les images ne doivent pas dépasser de leur encadré */
+.bact-hero img {
+  width: 100%;                /* S'assure que l'image prend toute la largeur de son conteneur */
+  height: auto;               /* Garde les proportions de l'image */
+  max-width: 100%;            /* L'image ne peut pas dépasser de l'écran */
+  border-radius: 12px;        /* Coins arrondis pour l'image */
+  object-fit: cover;          /* Ajuste l'image pour qu'elle occupe bien l'espace sans déformation */
+}
+
+/* =========================================================
+   ✅ Optimisation mobile pour encadrés avec tableaux
+   ========================================================= */
+
+/* 1️⃣  Header non collant sur mobile */
+@media (max-width: 768px) {
+  .app-header {
+    position: static !important;   /* ne reste plus visible au scroll */
+    top: auto !important;
+  }
+  body {
+    padding-top: 0 !important;     /* supprime le décalage éventuel du header */
+  }
+}
+
+/* 2️⃣  Encadrés pleine largeur + images ajustées + police réduite */
+.info-grid {
+  display: flex;
+  flex-direction: column; /* disposition verticale */
+  gap: 12px;
+}
+
+.info-card,
+.bact-hero,
+.bact-hero img {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bact-hero img {
+  display: block;
+  height: auto;
+  border-radius: 12px;
+}
+
+.info-card {
+  color: black !important;  /* texte toujours lisible */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 100%;               /* Forces les encadrés à occuper 100% de la largeur */
+  box-sizing: border-box;    /* Inclut les bordures et le padding dans la largeur */
+}
+
+/* Police et espacement adaptés sur mobile */
+@media (max-width: 768px) {
+  .info-card { padding: 10px; }
+  .info-card h3 { font-size: 14px; }  /* Réduction de la police des titres */
+  .info-content { font-size: 12px; line-height: 1.4; }  /* Réduction de la police du contenu */
+  .bact-page { padding-left: 10px; padding-right: 10px; width: 100%; } /* Assure que la page bactérie prend toute la largeur */
+}
+
+/* =========================================================
+   ✅ Tables : défilement horizontal dans les 4 derniers encadrés
+   ========================================================= */
+
+/* Permettre le défilement horizontal dans les tableaux des encadrés */
+@media (max-width: 768px) {
+  .info-card .info-content {
+    overflow-x: auto !important;   /* Permet de faire défiler horizontalement les tableaux à l'intérieur de l'encadré */
+    -webkit-overflow-scrolling: touch; /* Défilement fluide */
+  }
+
+  /* Ajustement de la largeur des tableaux pour qu'ils occupent toute la largeur de l'encadré */
+  table.simple, table.pheno {
+    width: 100% !important;       /* Tableaux prennent toute la largeur de l'encadré */
+    table-layout: auto;           /* Les colonnes s'ajustent automatiquement */
+    min-width: 600px;             /* Largeur minimale pour éviter une compression excessive */
+    border-collapse: collapse;   /* Fusionne les bordures des cellules */
+  }
+
+  /* S'assurer que le texte dans les tableaux soit lisible et adapté */
+  table.simple th, table.simple td,
+  table.pheno th, table.pheno td {
+    font-size: 13px !important;   /* Réduire la taille de la police dans les tableaux sur mobile */
+    padding: 4px 6px;
+  }
+
+  /* Assure que les 4 derniers encadrés (Phénotype, Antibiotique de référence, Antibiotique selon le site infectieux, Ajout si choc septique) ont un défilement horizontal */
+  .info-card:nth-child(4),  /* Phénotype habituel */
+  .info-card:nth-child(5),  /* Antibiotique de référence */
+  .info-card:nth-child(6),  /* Antibiotique selon le site infectieux */
+  .info-card:nth-child(7) { /* Ajout si choc septique */
+    overflow-x: auto !important;  /* Permet le défilement horizontal des tableaux uniquement */
+    white-space: nowrap;           /* Évite que le texte dans les cellules du tableau se brise sur plusieurs lignes */
+  }
+  
+  /* Optionnel : visuel de la barre de défilement */
+  .info-card .info-content::-webkit-scrollbar { height: 8px; }
+  .info-card .info-content::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+  }
+  .info-card .info-content::-webkit-scrollbar-thumb:hover { background: #888; }
+}
+
+/* Forcer les tableaux à être responsives */
+table.simple, table.pheno {
+  width: 100% !important; /* Assurez-vous que le tableau prend toute la largeur */
+  table-layout: fixed; /* Pour ajuster la taille des colonnes automatiquement */
+  border-collapse: collapse;
+}
+
+/* Appliquer un défilement horizontal à l'intérieur des tableaux */
+.info-card .info-content {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch; /* Défilement fluide sur mobile */
+}
+
+/* Appliquer une largeur maximale à l'encadré pour s'assurer qu'il ne dépasse pas de l'écran */
+.info-card {
+  width: 100%;               /* L'encadré occupe toute la largeur de l'écran */
+  max-width: 100%;           /* Assurer qu'il ne dépasse pas la largeur de l'écran */
+  box-sizing: border-box;    /* Inclut les bordures et le padding dans la largeur totale */
+  overflow: hidden;          /* Empêcher tout débordement de l'encadré */
+}
+
+/* Appliquer un défilement horizontal pour le tableau, et permettre le dépassement */
+.info-card table {
+  width: auto !important;      /* Permet au tableau de dépasser si nécessaire */
+  min-width: 720px;            /* Largeur minimale, ajustez selon le contenu */
+  table-layout: auto;          /* Colonne s'ajuste automatiquement */
+  border-collapse: collapse;   /* Fusionne les bordures du tableau */
+}
+
+/* Limiter le contenu à la largeur des cellules (éviter les dépassements dans les cellules) */
+.info-card table td,
+.info-card table th {
+  white-space: nowrap;      /* Empêche le texte de s'étendre à la ligne */
+  overflow: hidden;         /* Masque les parties du contenu qui dépassent la cellule */
+  text-overflow: ellipsis;  /* Affiche "..." si le texte dépasse */
+  padding: 6px 8px;         /* Un peu d'espace autour du texte */
+}
+
+/* Pour les petits écrans, réduire la taille de la police dans les tableaux */
+@media (max-width: 768px) {
+  .info-card table {
+    font-size: 12px !important;  /* Réduit la taille de la police sur mobile */
+  }
+
+  /* Réduction du contenu dans les encadrés */
+  .info-card .info-content {
+    font-size: 12px !important;  /* Réduit la taille de la police du contenu des encadrés */
+  }
+}
+
+/* Titres des encadrés - Mise en valeur avec une taille plus grande et couleur bleue */
+.info-card h3 {
+  color: #2b5797;  /* Bleu pour le titre */
+  font-size: 18px;  /* Taille de police plus grande */
+  font-weight: 700;  /* Plus gras pour un meilleur contraste */
+  margin-bottom: 12px;  /* Un peu d'espace en dessous */
+  border-bottom: 2px solid #2b5797; /* Une ligne sous le titre pour mieux le séparer du contenu */
+  padding-bottom: 8px;  /* Espace entre le titre et la ligne sous le titre */
+}
+
+/* Mise en valeur des points et tirets dans le contenu des encadrés */
+.info-card .info-content {
+  font-size: 14px;         /* Un peu plus grand pour le contenu des encadrés */
+  line-height: 1.6;        /* Espacement entre les lignes pour améliorer la lisibilité */
+}
+
+.info-card .info-content li {
+  font-size: 14px;         /* Taille de texte pour les éléments de liste */
+  color: #333;             /* Couleur du texte */
+  margin-bottom: 8px;      /* Espacement entre les items de la liste */
+  list-style-type: disc;   /* Un style de puce classique pour les listes */
+}
+
+.info-card .info-content ul {
+  padding-left: 20px;      /* Espacement à gauche pour les listes */
+}
+
+/* Rétablir les bordures des tableaux */
+table.simple, table.pheno {
+  width: 100%;
+  border-collapse: collapse; /* Fusionner les bordures des cellules */
+  font-size: 14px;
+  background-color: white;
+}
+
+/* Rétablir les bordures de toutes les cellules du tableau */
+table.simple th, table.simple td,
+table.pheno th, table.pheno td {
+  border: 1px solid #ddd;  /* Bordure légère pour les cellules */
+  padding: 6px 8px;         /* Un peu d'espace dans les cellules */
+  vertical-align: top;
+  color: black;             /* Texte en noir pour les cellules */
+}
+
+table.simple th, table.pheno th {
+  background: #f5f7fa;      /* Fond clair pour les entêtes */
+  font-weight: 600;          /* Police en gras pour les entêtes */
+}
+
+/* Assurez-vous que les lignes de tableau soient visibles sur mobile aussi */
+@media (max-width: 768px) {
+  table.simple th, table.simple td,
+  table.pheno th, table.pheno td {
+    font-size: 12px !important;  /* Réduire la taille de la police pour une meilleure lisibilité sur mobile */
+    padding: 4px 6px;
+  }
+}
+
+/* 4) Nouveau style des titres de bactéries (bandeau bleu marine) */
+.title-badge {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto 8px;
+  padding: 14px 18px;
+  background: #1e3a8a;    /* bleu marine profond */
+  color: #ffffff !important; /* texte blanc dans le bandeau */
+  font-family: 'Segoe UI', Roboto, system-ui, -apple-system, Arial, sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1px solid #163172; /* léger liseré */
+}
+@media (max-width: 768px) {
+  .title-badge {
+    font-size: 18px;
+    padding: 12px 10px;
+    white-space: normal;
+    word-break: break-word; /* passe sur 2 lignes si nécessaire */
+  }
+}
+
+/* ===== Page Antibioprophylaxies per-opératoire ===== */
+.page-antibiopro .info-card .info-content {
+  font-size: 1.15rem;   /* réponse + lisible (~18px) */
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Image header : 100% écran, pas de débordement mobile */
+.page-antibiopro .card.hero {
+  padding: 0;           /* bord à bord comme les autres pages */
+}
+.page-antibiopro .card.hero img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;  /* même arrondi que tes cards */
+}
+
+/* Titre style "chip" sombre, petit, texte blanc (comme les autres fonctions) */
+.page-antibiopro .title-badge {
+  display: inline-block;
+  background: #111827;  /* encadré foncé */
+  color: #fff;          /* texte blanc */
+  font-size: 0.95rem;   /* un peu plus petit */
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* Titre de la page Antibioprophylaxies — même style que "Adaptation rénale" / "Modalités" */
+.page-antibiopro .title-badge {
+  background: transparent;        /* pas de bande bleue */
+  color: var(--text);             /* s’adapte clair/sombre comme ailleurs */
+  text-transform: none;           /* pas de MAJUSCULES */
+  font-weight: 600;
+  font-size: 1rem;                /* même taille que les autres titres de fonction */
+  letter-spacing: normal;
+  text-align: left;               /* aligné comme les autres */
+  padding: 0 0 8px 0;             /* pas d'encart, juste un petit espace dessous */
+  border: none;                   /* pas de bordure/badge */
+  width: 100%;
+  display: block;
+}
+
+/* Médiastinite */
+.page-mediastinite .info-card .info-content {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+.page-mediastinite .card.hero { padding: 0; overflow: hidden; }
+.page-mediastinite .card.hero img {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 12px;
+}
+.page-mediastinite .title-badge {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  text-transform: none !important;   /* force pas de MAJ */
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-align: left;
+  padding: 0 0 8px 0;
+  border: none;
+}
+
+/* Scarpa */
+.page-scarpa .info-card .info-content {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+.page-scarpa .card.hero { padding: 0; overflow: hidden; }
+.page-scarpa .card.hero img {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 12px;
+}
+.page-scarpa .title-badge {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  text-transform: none !important;   /* force pas de MAJ */
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-align: left;
+  padding: 0 0 8px 0;
+  border: none;
+}
+
+/* Encadré d'information pour la fonction rénale — style "légende" */
+.rein-note {
+  margin-top: 16px;
+  background-color: #e5e7eb; /* gris moyen, même ton que les encadrés légende */
+  border: 1px solid #d1d5db; /* bordure gris clair */
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #111;               /* texte bien contrasté */
+  box-shadow: none;          /* pas d’ombre, comme les légendes */
+  overflow: visible;         /* pas de scroll interne */
+}
+
+.rein-note .info-content {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: normal;       /* autorise le retour à la ligne */
+  overflow-x: hidden;        /* empêche la barre de défilement horizontale */
+  text-align: left;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rein-note {
+    background-color: #374151; /* gris foncé adapté au mode sombre */
+    border-color: #4b5563;
+    color: #f3f4f6;
+  }
+}
+
+
