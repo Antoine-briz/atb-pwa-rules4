@@ -1,6 +1,6 @@
 {
-  "name": "Antibio-CLASH",
-  "short_name": "Antibio-CLASH",
+  "name": "Antibio ICU - CHV",
+  "short_name": "Antibio ICU - CHV",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
