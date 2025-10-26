@@ -1,6 +1,6 @@
 {
-  "name": "Antibio ICU - CHV",
-  "short_name": "Antibio ICU - CHV",
+  "name": "Antibio ICU - IMM",
+  "short_name": "Antibio ICU - IMM",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
