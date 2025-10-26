@@ -1132,9 +1132,9 @@ function renderProbaMenu() {
       <button class="btn outline" onclick="location.hash='#/proba/neuro'">Infections neuro-méningées</button>
       <button class="btn outline" onclick="location.hash='#/proba/dermohypo'">Infections des parties molles</button>
       <button class="btn outline" onclick="location.hash='#/proba/endocardite'">Endocardites infectieuses</button>
-      <button class="btn outline" onclick="location.hash='#/proba/sepsis'">Sepsis sans porte d'entrée</button>
       <button class="btn outline" onclick="location.hash='#/proba/mediastinite'">Médiastinites post-opératoires</button>
       <button class="btn outline" onclick="location.hash='#/proba/scarpa'">Infections de scarpa</button>
+      <button class="btn outline" onclick="location.hash='#/proba/sepsis'">Sepsis sans porte d'entrée</button>
     `)}
     ${h("card", `<button class="btn ghost" onclick="history.back()">← Retour</button>`)}
   `;
