@@ -3426,8 +3426,8 @@ function renderModalitesForm() {
   // ➕ crédits en bas de l’encadré
   out.innerHTML += `
     <div class="credits">
-      <em>D'après le travail de : Dr Candice FONTAINE et Dr Antoine BRIZARD<br>
-      (Bases de données ANSM, RCP européennes et Dexther)</em>
+      D'après le travail de : Dr Candice FONTAINE et Dr Antoine BRIZARD<br>
+      (Bases de données ANSM, RCP européennes et Dexther)
     </div>`;
 }); 
 } 
